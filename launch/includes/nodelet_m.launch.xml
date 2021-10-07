@@ -1,5 +1,6 @@
 <launch>
 
+  <arg name="robot_id" doc="The robot number X, corresponding to omnidX or 0 for local machine" />
   <arg name="external_manager"    default="false"/>
   <arg name="manager"             default="realsense2_camera_manager"/>
   <arg name="serial_no"           default=""/>
@@ -109,8 +110,8 @@
   
 
 
-  <node unless="$(arg external_manager)" pkg="nodelet" type="nodelet" name="$(arg manager)" args="manager" output="$(arg output)" required="$(arg required)" respawn="$(arg respawn)"/>
-  <node pkg="nodelet" type="nodelet" name="realsense2_camera" args="load realsense2_camera/RealSenseNodeFactory $(arg manager)" required="$(arg required)" respawn="$(arg respawn)">
+  <node ns="omnid$(arg robot_id)" unless="$(arg external_manager)" pkg="nodelet" type="nodelet" machine="omnid$(arg robot_id)" name="$(arg manager)" args="manager" output="$(arg output)" required="$(arg required)" respawn="$(arg respawn)"/>
+  <node ns="omnid$(arg robot_id)" pkg="nodelet" type="nodelet" machine="omnid$(arg robot_id)" name="realsense2_camera" args="load realsense2_camera/RealSenseNodeFactory $(arg manager)" required="$(arg required)" respawn="$(arg respawn)">
     <param name="serial_no"                type="str"  value="$(arg serial_no)"/>
     <param name="usb_port_id"              type="str"  value="$(arg usb_port_id)"/>
     <param name="device_type"              type="str"  value="$(arg device_type)"/>
